@@ -20,6 +20,10 @@ void CPU::bindMMU(MMU *target) {
 }
 
 void CPU::run() {
+    if (halt) {
+        return;
+    }
+
     u8 op = mmu->read8(PC);
 
     // check for 0xCB prefixed opcodes
@@ -61,14 +65,6 @@ std::string CPU::getState() {
     return s.str();
 }
 
-int CPU::getCycles() {
-    return cycles;
-}
-
-void CPU::resetCycles() {
-    cycles = 0;
-}
-
 void CPU::setZNHC(bool fZ, bool fN, bool fH, bool fC) {
     setZNH(fZ, fN, fH);
     flagC = fC;
@@ -103,4 +99,14 @@ int CPU::getCycleCount(u8 op) {
     } else {
         return cycleCount[op];
     }
+}
+
+void CPU::callIntVector(u16 addr) {
+    // call vector and reset IME (master enable flag) 
+    CALL(addr);
+    IME = false;
+
+    // halt is also set to false and the PC is incremented to the next op
+    halt = false;
+    PC += 1;
 }

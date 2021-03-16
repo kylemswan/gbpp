@@ -19,6 +19,7 @@ class Emulator {
     sf::Event ev;
     sf::Clock timer;
 
+    void handleInterrupts();
     void handleEvents();
 };
 

@@ -17,8 +17,12 @@ class CPU {
     // return a formatted debug string 
     std::string getState();
 
-    int getCycles();
-    void resetCycles();
+    int cycles;
+
+    // interrupt handling logic
+    bool IME = true;
+    bool halt = true;
+    void callIntVector(u16 addr);
 
     private:
     u8 A, B, C, D, E, H, L;
@@ -26,8 +30,6 @@ class CPU {
 
     MMU *mmu;
 
-    bool intsEnabled = true;
-    bool running = true;
     bool branched = false;
 
     // CPU flags and shortcuts to set multiple at once
@@ -35,9 +37,6 @@ class CPU {
     void setZNHC(bool fZ, bool fN, bool fH, bool fC);
     void setZNH(bool fZ, bool fN, bool fH);
     void setNHC(bool fN, bool fH, bool fC);
-
-    // timing logic (unimplemented right now apart from just adding cycles...)
-    int cycles;
 
     // dispatch functions
     void exec(u8 op);

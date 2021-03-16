@@ -324,16 +324,16 @@ void CPU::SWAP(u8 &target) {
 
 // control instructions
 void CPU::DI() {
-    intsEnabled = false;
+    IME = false;
 }
 
 void CPU::EI() {
-    intsEnabled = true;
+    IME = true;
 }
 
 void CPU::HALT() {
-    // should wait for an interrupt
-    running = false;
+    // gets reset to false whenever an interrupt occurs
+    halt = true;
 }
 
 void CPU::NOP() {
@@ -349,7 +349,7 @@ void CPU::RST(u16 addr) {
 
 void CPU::STOP() {
     // should wait for a key press
-    running = false;
+    halt = true;
 }
 
 // special op to catch all unimplemented or missed ops in development

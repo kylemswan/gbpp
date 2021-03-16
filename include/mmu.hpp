@@ -7,6 +7,9 @@
 
 class MMU {
     public:
+    // memory location constants
+    static const u16 IE = 0xFFFF, IF = 0xFF0F;
+
     // attempt to write / read data into memory - this will eventually
     // contain more logic pertaining to read / write only sections of RAM
     void write8(u16 addr, u8 data);
@@ -22,7 +25,7 @@ class MMU {
     void loadROM(std::string path);
 
     private:
-    u8 memory[0xFFFF];
+    u8 memory[0xFFFF] = {0};
 };
 
 #endif // "mmu.hpp" included

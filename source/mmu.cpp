@@ -31,3 +31,26 @@ void MMU::loadROM(std::string path) {
     ROM.read((char *)memory, 0x8000);
     ROM.close();
 }
+
+void MMU::updateSpecialRegs() {
+    // DIV is reset to 0 if anything is written to it
+    u8 div = read8(DIV);
+    if (oldDIV != div) {
+        div == 0;
+    }
+    oldDIV = div;
+
+    // if DMA changed then a DMA transfer needs to happen
+    u8 dma = read8(DMA);
+    if (dma != oldDMA) {
+        doDMATransfer();
+    }
+    oldDMA = dma;
+}
+
+void MMU::doDMATransfer() {
+    u16 source = read8(DMA) * 100;
+    for (int i = 0; i < 160; i++) {
+        write8(0xFE00 + i, read8(source + i));
+    }
+}

@@ -12,6 +12,9 @@ class Emulator {
     void run();
 
     private:
+    int cycles = 0;
+    int cyclesThisLoop = 0;
+
     CPU cpu;
     MMU mmu;
 

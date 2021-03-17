@@ -12,7 +12,6 @@ void CPU::reset() {
     SP = 0xFFFE;
     PC = 0x0100;
     setZNHC(true, false, true, true);
-    cycles = 0;
 }
 
 void CPU::bindMMU(MMU *target) {
@@ -21,7 +20,6 @@ void CPU::bindMMU(MMU *target) {
 
 int CPU::run() {
     extraCycles = 0;
-
     u8 op = mmu->read8(PC);
 
     // check for 0xCB prefixed opcodes
@@ -36,8 +34,6 @@ int CPU::run() {
         PC += getPCOffset(op);
     }
     branched = false;
-
-    cycles += getCycleCount(op);
 
     // return cycles taken to be used by the timers
     return getCycleCount(op) + extraCycles;

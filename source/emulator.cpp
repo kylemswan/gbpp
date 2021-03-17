@@ -6,7 +6,7 @@ Emulator::Emulator(char *romPath) {
     cpu.reset();
     cpu.bindMMU(&mmu);
 
-    win.create(sf::VideoMode(640, 320), "gbpp");
+    win.create(sf::VideoMode(160, 144), "gbpp");
 }
 
 void Emulator::run() {
@@ -15,13 +15,18 @@ void Emulator::run() {
         if (timer.getElapsedTime().asSeconds() >= 1.0 / 60) {
             
             // CPU executes 4194304 cycles per second == 69905 per frame
-            while (cpu.cycles < 69905) {
-                int elapsedCycles = cpu.run();
-                updateTimers(elapsedCycles);
+            while (cycles < 69905) {
+                cyclesThisLoop = cpu.run();
+
+                updateTimers(cyclesThisLoop);
                 handleInterrupts();
+
+                mmu.updateSpecialRegs();
+
+                cycles += cyclesThisLoop;
             }
 
-            cpu.cycles = 0;
+            cycles = 0;
             timer.restart();
         }
 

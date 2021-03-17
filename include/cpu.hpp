@@ -19,9 +19,6 @@ class CPU {
     // return a formatted debug string 
     std::string getState();
 
-    int cycles;
-    int extraCycles = 0;
-
     // interrupt handling logic
     bool IME = true;
     bool halt = false;
@@ -131,6 +128,7 @@ class CPU {
 
     // tables for fetching PC offsets and cycle count based on the op performed
     // (conditional jumps and calls may add extra cycles if a branch is taken)
+    int extraCycles = 0;
     int getCycleCount(u8 op);
     int getPCOffset(u8 op);
 
